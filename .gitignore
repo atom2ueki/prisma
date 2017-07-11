@@ -1,3 +1,6 @@
+# upload temp folder
+.uploads/
+
 # Logs
 logs
 *.log
