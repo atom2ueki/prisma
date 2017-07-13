@@ -45,9 +45,9 @@ app.post('/prisma', upload.single('source_img'), function (req, res, next) {
 			if (err.code != "BucketAlreadyOwnedByYou") {
 				res.json({ errors: err });
 			}
-			minioClient.fPutObject('neural-style', req.file.filename+'.jpg', output_file, 'application/octet-stream', function(err, etag) {
+			minioClient.fPutObject('neural-style', 'neural-'+req.file.filename+'.jpg', output_file, 'application/octet-stream', function(err, etag) {
 			  if (err) return console.log(err)
-			  res.json({ errors: null, url: process.env.MINIO_ENDPOINT + '/' + bucket_name + '/' + req.file.filename + '.jpg' });
+			  res.json({ errors: null, url: process.env.MINIO_ENDPOINT + '/' + bucket_name + '/neural-' + req.file.filename + '.jpg' });
 			});
 		});
 	});
