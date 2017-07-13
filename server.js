@@ -23,7 +23,8 @@ var minioClient = new Minio.Client({
  * style: name if the style - String
  */
 app.post('/prisma', upload.single('source_img'), function (req, res, next) {
-	var output_file = './shared/output/'+req.file.filename+'_converted.jpg'
+	var output_file_path = './shared/output/'
+	var output_file_name = req.file.filename+'.jpg'
 	var style_obj = {'cosa': 'cosa.jpg', 'picasso': 'picasso.jpg', 'pop': 'pop.jpg', 'prisma': 'prisma.jpg', 'scream': 'scream.jpg', 'starry': 'starry.jpg', 'wave': 'wave.jpg'}
 	if(!style_obj.hasOwnProperty(req.body.style)) {
 		res.json({ errors: ['style cannot found!'] });
@@ -33,23 +34,23 @@ app.post('/prisma', upload.single('source_img'), function (req, res, next) {
 
 	var options = {
 	  scriptPath: '/home/app/neural-style/',
-	  args: ['--content', input_file, '--styles', style_file, '--output', output_file]
+	  args: ['--content', input_file, '--styles', style_file, '--output', output_file_path + output_file_name]
 	};
 
 	PythonShell.run('neural_style.py', options, function (err, results) {
-		if (err != null) {
-			res.json({ errors: ['neural_style hit errors!'] });
-		}
+// 		if (err != null) {
+// 			res.json({ errors: ['neural_style hit errors!'] });
+// 		}
 		let bucket_name = 'neural-style'
 		minioClient.makeBucket(bucket_name, 'us-east-1', function(err) {
 			if (err.code != "BucketAlreadyOwnedByYou") {
 				res.json({ errors: err });
 			}
-			minioClient.fPutObject('neural-style', 'neural-'+req.file.filename+'_converted.jpg', output_file, 'application/octet-stream', function(err, etag) {
+			minioClient.fPutObject('neural-style', 'neural-'+output_file_name, output_file_path + output_file_name, 'image/jpeg', function(err, etag) {
 			  if (err!=null) {
 			 	res.json({ errors: err });
 			  }else {
-			  	res.json({ errors: null, url: 'https://' + process.env.MINIO_ENDPOINT + '/' + bucket_name + '/neural-' + req.file.filename + '_converted.jpg' });
+			  	res.json({ errors: null, url: 'https://' + process.env.MINIO_ENDPOINT + '/' + bucket_name + '/neural-' + output_file_name });
 			  }
 			});
 		});
