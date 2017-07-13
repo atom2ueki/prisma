@@ -24,9 +24,9 @@ var minioClient = new Minio.Client({
  */
 app.post('/prisma', upload.single('source_img'), function (req, res, next) {
 	var output_file = './shared/output/'+req.file.filename+'_converted.jpg'
-	var style_obj = {'cosa': 'cosa.jpg', 'picasso': 'picasso.jpg', 'pop': 'pop.jpg', 'prisma': 'prisma.jpg', 'scream': 'scream.jpg', 'starry': 'starry.jpg', 'surfing': 'surfing.jpg'}
+	var style_obj = {'cosa': 'cosa.jpg', 'picasso': 'picasso.jpg', 'pop': 'pop.jpg', 'prisma': 'prisma.jpg', 'scream': 'scream.jpg', 'starry': 'starry.jpg', 'wave': 'wave.jpg'}
 	if(!style_obj.hasOwnProperty(req.body.style)) {
-		return
+		res.json({ errors: ['style cannot found!'] });
     }
 	var style_file = './shared/styles/'+style_obj[req.body.style]
 	var input_file = req.file.path
@@ -37,14 +37,17 @@ app.post('/prisma', upload.single('source_img'), function (req, res, next) {
 	};
 
 	PythonShell.run('neural_style.py', options, function (err, results) {
-		// upload output file
-		minioClient.makeBucket('neural-style', 'us-east-1', function(err) {
+		if (err != null) {
+			res.json({ errors: ['neural_style hit errors!'] });
+		}
+		let bucket_name = 'neural-style'
+		minioClient.makeBucket(bucket_name, 'us-east-1', function(err) {
 			if (err.code != "BucketAlreadyOwnedByYou") {
-				return console.log(err)
+				res.json({ errors: err });
 			}
-			minioClient.fPutObject('neural-style', req.file.filename+'.jpg', req.file.path, 'application/octet-stream', function(err, etag) {
+			minioClient.fPutObject('neural-style', req.file.filename+'.jpg', output_file, 'application/octet-stream', function(err, etag) {
 			  if (err) return console.log(err)
-			  console.log(etag)
+			  res.json({ errors: null, url: process.env.MINIO_ENDPOINT + '/' + bucket_name + '/' + req.file.filename + '.jpg' });
 			});
 		});
 	});
