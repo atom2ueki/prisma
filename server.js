@@ -49,7 +49,7 @@ app.post('/prisma', upload.single('source_img'), function (req, res, next) {
 			  if (err!=null) {
 			 	res.json({ errors: err });
 			  }else {
-			  	res.json({ errors: null, url: process.env.MINIO_ENDPOINT + '/' + bucket_name + '/neural-' + req.file.filename + '_converted.jpg' });
+			  	res.json({ errors: null, url: 'https://' + process.env.MINIO_ENDPOINT + '/' + bucket_name + '/neural-' + req.file.filename + '_converted.jpg' });
 			  }
 			});
 		});
