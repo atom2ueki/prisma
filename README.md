@@ -2,8 +2,7 @@
 
 ![neural-cover](https://s3.atom2ueki.com/neural-style/neural-cover.jpg)
 
-this is a concept of how you can build a nodejs api with tensorflow to making your own prisma app (backend)
-prisma backend served with docker (credits to [Tensorflow](https://www.tensorflow.org/) and [neural-style](https://github.com/anishathalye/neural-style))
+this is a concept of how you can build a nodejs api with tensorflow to making your own prisma backend served with docker (credits to [Tensorflow](https://www.tensorflow.org/) and [neural-style](https://github.com/anishathalye/neural-style))
 
 ## Requirements
 1. NVIDIA Cuda GPU
