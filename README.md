@@ -1,5 +1,8 @@
 # prisma
-build your own prisma app (backend)
+
+![neural-cover](https://s3.atom2ueki.com/neural-style/neural-cover.jpg)
+
+this is a concept of how you can build a nodejs api with tensorflow to making your own prisma app (backend)
 prisma backend served with docker (credits to [Tensorflow](https://www.tensorflow.org/) and [neural-style](https://github.com/anishathalye/neural-style))
 
 ## Requirements
@@ -26,3 +29,5 @@ nvidia-docker run -d --name prisma -p 8080:8080 -v {PATH_TO_THIS_PROJECT}/shared
 - parameters
   - source_img: jepg image file
   - style: String ( pick anyone from this array ['cosa', 'picasso', 'pop', 'prisma', 'scream', 'starry', 'wave'] )
+
+![neural-cover](https://s3.atom2ueki.com/neural-style/neural-sample.jpg)
