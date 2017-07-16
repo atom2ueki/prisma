@@ -11,8 +11,8 @@ prisma backend served with docker (credits to [Tensorflow](https://www.tensorflo
 3. [AWSS3](https://aws.amazon.com/s3/) or [Minio Server](https://github.com/minio/minio) for saving the processed image
 
 ## init setup
-download [Pre-trained VGG network](http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat) put into ./shared/model folder
-create a folder named ./shared/output
+- download [Pre-trained VGG network](http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat) put into ./shared/model folder
+- create a folder named `output` under project `./shared/`
 
 ## build docker image
 navigate to the root folder of this project
